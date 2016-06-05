@@ -4,6 +4,8 @@ const
 	Interpreter = require('./interpreter'),
 	fs          = require('fs');
 
+/* EXAMPLE CODE */
+
 let code = fs.readFileSync('./testCode.jlc').toString();
 console.log('[ CODE ]');
 console.log(code);

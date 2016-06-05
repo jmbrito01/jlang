@@ -256,7 +256,6 @@ class Interpreter {
 		return Node.createNumber(f!==s);
 	}
 
-
 	isSmaller(first, second) {
 		let f = this.getNodeValue(first);
 		let	s = this.getNodeValue(second);

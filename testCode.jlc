@@ -1,9 +1,9 @@
-func isOdd num {
-    ret num mod 2 != 0;
-}
-
 func isEven num {
-    ret num mod 2 ? true: isOdd(num);
+    ret num mod 2 === 0;
 }
-
-i = isEven(3);
+i = 0;
+if isEven(2) {
+    while i < 5 {
+        i += 1;
+    }
+}
