@@ -63,6 +63,11 @@
 			"type": "infix"
 		},
 		{
+			"id": "!=",
+			"bp": 50,
+			"type": "infix"
+		},
+		{
 			"id": "===",
 			"bp": 50,
 			"type": "infix"
@@ -94,12 +99,12 @@
 		},
 
 		{
-			"id": "&&",
+			"id": "and",
 			"bp": 30,
 			"type": "infixr"
 		},
 		{
-			"id": "||",
+			"id": "or",
 			"bp": 30,
 			"type": "infixr"
 		},

@@ -1,6 +1,9 @@
-func isEven num {
-    # Check if num is even #
-    ret (num mod 2) === 0;
+func isOdd num {
+    ret num mod 2 != 0;
 }
 
-var i = "#TESTANEDO";
+func isEven num {
+    ret num mod 2 ? true: isOdd(num);
+}
+
+i = isEven(3);

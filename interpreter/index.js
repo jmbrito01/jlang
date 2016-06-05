@@ -2,23 +2,39 @@ const
 	Context             = require('./context'),
 	Node                = require('./node');
 
+//TODO: Interpret break
+
 class Interpreter {
 	constructor() {
 		this.context = new Context();
 	}
 
 	run(tree) {
-		for (let node of tree) {
-			var result = this.simplify(node);
-			if (!result) throw `ERROR INTERPRETING ${node.id}`;
+		if (tree) {
+			for (let node of tree) {
+				var result = this.simplify(node);
+				if (!result) throw `ERROR INTERPRETING ${node.id}`;
+			}
 		}
+
 	}
 
 	simplify(node) {
 		switch (node.arity) {
 			case 'binary': return this.binarySimplifier(node);
+			case 'ternary': return this.ternarySimplifier(node);
 			case 'statement': return this.statementSimplifier(node);
 			case 'function': return this.functionSimplifier(node);
+		}
+	}
+
+	isSimplifiable(node) {
+		return node.arity === ('binary' || 'ternary' || 'statement' || 'function');
+	}
+
+	ternarySimplifier(node) {
+		switch (node.id) {
+			case '?': return this.checkAndAssign(node.first, node.second, node.third);
 		}
 	}
 
@@ -43,8 +59,10 @@ class Interpreter {
 			case '/': return this.divide(node.first, node.second);
 			case '==': return this.isEqual(node.first, node.second);
 			case '===': return this.isEqualAndType(node.first, node.second);
-			case '&&': return this.logicAnd(node.first, node.second);
-			case '||': return this.logicOr(node.first, node.second);
+			case '!=': return this.isDifferent(node.first, node.second);
+			case '!==': return this.isDifferentAndType(node.first, node.second);
+			case 'and': return this.logicAnd(node.first, node.second);
+			case 'or': return this.logicOr(node.first, node.second);
 			case '<': return this.isSmaller(node.first, node.second);
 			case '<=': return this.isSmallerOrEqual(node.first, node.second);
 			case '>': return this.isBigger(node.first, node.second);
@@ -224,6 +242,21 @@ class Interpreter {
 		return Node.createNumber(f===s);
 	}
 
+	isDifferent(first, second) {
+		let f = this.getNodeValue(first);
+		let	s = this.getNodeValue(second);
+
+		return Node.createNumber(f!=s);
+	}
+
+	isDifferentAndType(first, second) {
+		let f = this.getNodeValue(first);
+		let	s = this.getNodeValue(second);
+
+		return Node.createNumber(f!==s);
+	}
+
+
 	isSmaller(first, second) {
 		let f = this.getNodeValue(first);
 		let	s = this.getNodeValue(second);
@@ -284,6 +317,14 @@ class Interpreter {
 		funcInt.run(func.body);
 		
 		return funcInt.context.getVar('(return)');
+	}
+
+	checkAndAssign(first, second, third) {
+		let f = this.getNodeValue(first);
+		if (this.isSimplifiable(second)) second = this.simplify(second);
+		if (this.isSimplifiable(third)) third = this.simplify(third);
+		if (f) return second;
+		else return third;
 	}
 
 	getNodeValue(node) {
