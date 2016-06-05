@@ -53,6 +53,11 @@
 			"type": "infix"
 		},
 		{
+			"id": "mod",
+			"bp": 60,
+			"type": "infix"
+		},
+		{
 			"id": "==",
 			"bp": 50,
 			"type": "infix"

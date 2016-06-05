@@ -4,6 +4,7 @@ const
 	PrototypeToken      = require('./prototypeToken');
 
 //TODO: Parse typeof
+//TODO: Parse for
 
 class Parser {
 	constructor() {
@@ -123,18 +124,17 @@ class Parser {
 		});
 
 		this.stmt('while', function () {
-			parser.advance();
+
 			this.first = parser.expression(0);
-			parser.advance(')');
+
 			this.second = parser.block();
 			this.arity = 'statement';
 			return this;
 		});
 
 		this.stmt('if', function () {
-			parser.advance();
 			this.first = parser.expression(0);
-			parser.advance(')');
+
 			this.second = parser.block();
 			this.arity = 'statement';
 
@@ -159,7 +159,7 @@ class Parser {
 			return this;
 		});
 
-		this.stmt('return', function () {
+		this.stmt('ret', function () {
 			if (parser.token.id !== ';') {
 				this.first = parser.expression(0);
 			}
@@ -173,7 +173,7 @@ class Parser {
 			return this;
 		});
 
-		this.prefix('function', function () {
+		this.prefix('func', function () {
 			let params = [];
 			parser.scope = Scope.create(parser.scope);
 
@@ -182,9 +182,8 @@ class Parser {
 				this.value = parser.token.value;
 				parser.advance();
 			}
-			parser.advance('(');
 
-			if (parser.token.id !== ')') {
+			if (parser.token.id !== '{') {
 				while (true) {
 					if (parser.token.arity !== 'name') {
 						parser.token.error('Expected a parameter name');
@@ -201,7 +200,6 @@ class Parser {
 				}
 			}
 			this.first = params;
-			parser.advance(')');
 			parser.advance('{');
 			this.second = parser.statements();
 			parser.advance('}');
@@ -315,7 +313,7 @@ class Parser {
 		}
 		let v = this.expression(0);
 		if (!v.assignment && v.id !== '(') {
-			if (v.id === 'function') {
+			if (v.arity === 'function') {
 				this.scope.define(v);
 			} else {
 				v.error('bad expression statement');

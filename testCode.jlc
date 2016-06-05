@@ -1,0 +1,6 @@
+func isEven num {
+    # Check if num is even #
+    ret (num mod 2) === 0;
+}
+
+var i = "#TESTANEDO";

@@ -30,7 +30,7 @@ class Interpreter {
 		switch (node.id) {
 			case 'if': return this.ifStatement(node.first, node.second, node.third);
 			case 'while': return this.whileStatement(node.first, node.second);
-			case 'return': return this.returnStatement(node.first);
+			case 'ret': return this.returnStatement(node.first);
 		}
 	}
 
@@ -52,6 +52,7 @@ class Interpreter {
 			case '+=': return this.assignIncrease(node.first, node.second);
 			case '-=': return this.assignDecrease(node.first, node.second);
 			case '(': return this.callFunction(node.first, node.second);
+			case 'mod': return this.mod(node.first, node.second);
 		}
 	}
 
@@ -202,6 +203,13 @@ class Interpreter {
 		return Node.createNumber(f/s);	
 	}
 
+	mod(first, second) {
+		let f = this.getNodeValue(first);
+		let	s = this.getNodeValue(second);
+
+		return Node.createNumber(f % s);
+	}
+
 	isEqual(first, second) {
 		let f = this.getNodeValue(first);
 		let	s = this.getNodeValue(second);
@@ -284,6 +292,8 @@ class Interpreter {
 			case 'number': result = node.value;
 				break;
 			case 'name': result = this.context.getVar(node.id);
+				break;
+			case 'literal': result = node.value;
 				break;
 			case 'binary': result = this.binarySimplifier(node);
 				break;

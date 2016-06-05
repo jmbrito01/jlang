@@ -1,6 +1,8 @@
 const 
 	Lexer           = require('lex');
 
+//TODO: Filter comments
+
 function tokenize(code) {
 
 	let lexer = new Lexer();
@@ -30,7 +32,7 @@ function tokenize(code) {
 	});
 
 	//Symbol
-	lexer.addRule(/(\++|<|>|!|-+)(?!=)+|,|\*|\/|&&|\|\||{|}|"|'|;|:|\(|\)|(\+|<|>|!|-)?(=?=?=)/g, function (val) {
+	lexer.addRule(/(\++|<|>|!|-+)(?!=)+|,|\*|\/|&&|\|\||{|}|"|;|:|\(|\)|#|(\+|<|>|!|-)?(=?=?=)/g, function (val) {
 		tokens.push({
 			type: 'symbol',
 			value: val
@@ -45,24 +47,34 @@ function tokenize(code) {
 function filterStrings(tokens) {
 	let
 		result      = [],
-		opened      = false,
-		stringNext  = false;
+		openIdx     = -1;
 
-	for (let token of tokens) {
-		if (token.value === '"' || token.value === "'" ) {
-			if (opened) {
-				opened = false;
-				stringNext = true;
+	for (let i = 0;i < tokens.length;i++) {
+		let token = tokens[i];
+
+		if (token.type === 'symbol' && token.value === '"') {
+			//Is a string token
+			if (openIdx !== -1) {
+				//The string is between openIdx and i
+				let str = "";
+				for (let j = openIdx;j < i;j++) {
+					str += tokens[j].value;
+				}
+				result.push({
+					type: 'string',
+					value: str
+				});
+				openIdx = -1;
+				continue;
 			} else {
-				opened = true;
+				openIdx = i+1;
+				continue;
 			}
-		} else {
-			if (stringNext) {
-				result[result.length-1].type = 'string';
-				stringNext = false;
-			}
-			result.push(token);
 		}
+
+		if (openIdx !== -1) continue;
+
+		result.push(token);
 	}
 
 	return result;
@@ -92,6 +104,34 @@ function filterHex(tokens) {
 	return result;
 }
 
+function filterComments(tokens) {
+	let
+		result      = [],
+		openIdx     = -1;
+
+	for (let i = 0;i < tokens.length;i++) {
+		let token = tokens[i];
+
+		if (token.type === 'symbol' && token.value === '#') {
+			//Is a string token
+			if (openIdx !== -1) {
+				//The comment is between openIdx and i
+				openIdx = -1;
+				continue;
+			} else {
+				openIdx = i+1;
+				continue;
+			}
+		}
+
+		if (openIdx !== -1) continue;
+
+		result.push(token);
+	}
+
+	return result;
+}
+
 function analyse(tokens) {
 
 	//After analysing lets clean up the spaces
@@ -99,7 +139,7 @@ function analyse(tokens) {
 		return each.type !== 'space';
 	});
 
-	return filterHex(filterStrings(filtered));
+	return filterComments(filterHex(filterStrings(filtered)));
 }
 
 function lex(code) {
