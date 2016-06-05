@@ -46,8 +46,8 @@ class Interpreter {
 			case '&&': return this.logicAnd(node.first, node.second);
 			case '||': return this.logicOr(node.first, node.second);
 			case '<': return this.isSmaller(node.first, node.second);
-			case '>': return this.isSmallerOrEqual(node.first, node.second);
-			case '<=': return this.isBigger(node.first, node.second);
+			case '<=': return this.isSmallerOrEqual(node.first, node.second);
+			case '>': return this.isBigger(node.first, node.second);
 			case '>=': return this.isBiggerOrEqual(node.first, node.second);
 			case '+=': return this.assignIncrease(node.first, node.second);
 			case '-=': return this.assignDecrease(node.first, node.second);

@@ -4,7 +4,7 @@ const
 	Interpreter = require('./interpreter'),
 	fs          = require('fs');
 
-let code = fs.readFileSync('./testCode.js').toString();
+let code = fs.readFileSync('./testCode.bl').toString();
 console.log('[ CODE ]');
 console.log(code);
 
