@@ -1,5 +1,5 @@
 {
-  "name": "jmlang",
+  "name": "jlang",
   "version": "1.0.0",
   "description": "Just another basic language",
   "main": "index.js",
