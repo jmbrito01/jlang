@@ -1,0 +1,14 @@
+{
+  "name": "blang",
+  "version": "1.0.0",
+  "description": "Just another basic language",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "João Marcelo Brito",
+  "license": "MIT",
+  "dependencies": {
+    "lex": "^1.7.9"
+  }
+}

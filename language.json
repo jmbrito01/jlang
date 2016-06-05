@@ -1,0 +1,152 @@
+{
+	"symbols": [
+		{
+			"id": ":",
+			"type": "symbol"
+		},
+		{
+			"id": ";",
+			"type": "symbol"
+		},
+		{
+			"id": ",",
+			"type": "symbol"
+		},
+		{
+			"id": ")",
+			"type": "symbol"
+		},
+		{
+			"id": "}",
+			"type": "symbol"
+		},
+		{
+			"id": "else",
+			"type": "symbol"
+		},
+		{
+			"id": "(end)",
+			"type": "symbol",
+			"private": true
+		},
+
+
+
+		{
+			"id": "+",
+			"bp": 60,
+			"type": "infix"
+		},
+		{
+			"id": "-",
+			"bp": 60,
+			"type": "infix"
+		},
+		{
+			"id": "*",
+			"bp": 70,
+			"type": "infix"
+		},
+		{
+			"id": "/",
+			"bp": 70,
+			"type": "infix"
+		},
+		{
+			"id": "==",
+			"bp": 50,
+			"type": "infix"
+		},
+		{
+			"id": "===",
+			"bp": 50,
+			"type": "infix"
+		},
+		{
+			"id": "!==",
+			"bp": 50,
+			"type": "infix"
+		},
+		{
+			"id": "<",
+			"bp": 50,
+			"type": "infix"
+		},
+		{
+			"id": "<=",
+			"bp": 50,
+			"type": "infix"
+		},
+		{
+			"id": ">",
+			"bp": 50,
+			"type": "infix"
+		},
+		{
+			"id": ">=",
+			"bp": 50,
+			"type": "infix"
+		},
+
+		{
+			"id": "&&",
+			"bp": 30,
+			"type": "infixr"
+		},
+		{
+			"id": "||",
+			"bp": 30,
+			"type": "infixr"
+		},
+
+
+
+		{
+			"id": "=",
+			"type": "assignment"
+		},
+		{
+			"id": "+=",
+			"type": "assignment"
+		},
+		{
+			"id": "-=",
+			"type": "assignment"
+		},
+
+
+
+		{
+			"id": "+",
+			"type": "prefix"
+		},
+		{
+			"id": "-",
+			"type": "prefix"
+		},
+		{
+			"id": "!",
+			"type": "prefix"
+		},
+
+		{
+			"id": "{",
+			"type": "other"
+		}
+	],
+	"constants": [
+		{
+			"id": "true",
+			"value": true
+		},
+		{
+			"id": "false",
+			"value": false
+		},
+		{
+			"id": "null",
+			"value": null
+		}
+	],
+	"aggregable_types": ["number", "name"]
+}
