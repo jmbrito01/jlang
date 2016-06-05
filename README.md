@@ -4,10 +4,10 @@
 JLang is a programming language made in javascript that i created
 in an effort to better understand the process of parsing and
 interpreting. This project includes:
-* JLang Lexer:Simple lexer made using[aaditmshah's
+* JLang Lexer:Simple lexer made using [aaditmshah's
 lex library](https://github.com/aaditmshah/lexer) with some extra
 analysis on top
-* JLang Parser: A pratt parser based on[Douglas Crockford's
+* JLang Parser: A pratt parser based on [Douglas Crockford's
 TDOP article](http://javascript.crockford.com/tdop/tdop.html)
 * JLang Interpreter: Simple interpreter made to understand
 the parsed tree.
