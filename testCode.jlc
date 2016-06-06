@@ -1,3 +1,2 @@
-console.log("TEST", "Working!");
-console.warn("One warning");
-console.error("Oh no error!");
+path = node.require("path");
+i = path.isAbsolute("./abc");

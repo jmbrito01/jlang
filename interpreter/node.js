@@ -20,6 +20,31 @@ class Node {
 			value: val
 		});
 	}
+
+	static createLiteral(val) {
+		return new Node({
+			arity: 'literal',
+			id: val,
+			value: val
+		});
+	}
+
+	static createObject(val) {
+		return new Node({
+			arity: 'object',
+			id: val,
+			value: val
+		});
+	}
+	
+	static createNode(val) {
+		switch (typeof val) {
+			case 'object': return Node.createObject(val);
+			case 'string': return Node.createText(val);
+			case 'number': return Node.createNumber(val);
+			case 'boolean': return Node.createLiteral(val);
+		}
+	}
 }
 
 module.exports = Node;

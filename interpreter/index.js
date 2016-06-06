@@ -345,7 +345,7 @@ class Interpreter {
 					});
 					let result = first.call(args);
 					this.context.setVar('(return)', result);
-					return true;
+					return Node.createNode(result);
 				}
 			}
 
@@ -390,6 +390,9 @@ class Interpreter {
 			case 'binary': result = this.binarySimplifier(node);
 				break;
 			case 'string': result = node.value;
+				break;
+			case 'object': result = node.value;
+				break;
 		}
 
 		if (result instanceof Node) {
