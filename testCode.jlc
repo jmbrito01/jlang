@@ -1,12 +1,1 @@
-func isEven num {
-    ret num mod 2 === 0;
-}
-i = 0;
-if isEven(2) {
-    while i < 5 {
-        i += 1;
-        if i > 3 {
-            break;
-        }
-    }
-}
+console.log("ERROR", "Funciona!");

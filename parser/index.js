@@ -56,7 +56,7 @@ class Parser {
 			//this.second = params;
 			if ((left.arity !== "unary" || left.id !== "function") &&
 				left.arity !== "name" && left.id !== "(" &&
-				left.id !== "&&" && left.id !== "||" && left.id !== "?") {
+				left.id !== "&&" && left.id !== "||" && left.id !== "?" && left.id !== '.') {
 				left.error("Expected a variable name.");
 			}
 
@@ -71,6 +71,19 @@ class Parser {
 			}
 			this.second = params;
 			parser.advance(')');
+			return this;
+		});
+
+		this.infix('.', 80, function (left) {
+			this.first = left;
+			if (parser.token.arity !== 'name') {
+				return parser.error(`Expected a property name`);
+			}
+
+			parser.token.arity = 'literal';
+			this.second = parser.token;
+			this.arity = 'binary';
+			parser.advance();
 			return this;
 		});
 
@@ -141,9 +154,11 @@ class Parser {
 			if (parser.token.id === 'else') {
 				parser.scope.reserve(parser.token);
 				parser.advance('else');
+
 				this.third = parser.block();
 				//TODO: Implement else if
-			} else {
+			}
+			else {
 				this.third = null;
 			}
 

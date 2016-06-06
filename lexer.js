@@ -32,7 +32,7 @@ function tokenize(code) {
 	});
 
 	//Symbol
-	lexer.addRule(/(\++|<|>|!|-+)(?!=)+|,|\*|\/|&&|\|\||{|}|"|;|:|\?|\(|\)|#|(\+|<|>|!|-)?(=?=?=)/g, function (val) {
+	lexer.addRule(/(\++|<|>|!|-+)(?!=)+|,|\*|\/|&&|\|\||{|}|"|\.|;|:|\?|\(|\)|#|(\+|<|>|!|-)?(=?=?=)/g, function (val) {
 		tokens.push({
 			type: 'symbol',
 			value: val

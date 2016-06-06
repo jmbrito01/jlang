@@ -1,12 +1,18 @@
 const
 	Context             = require('./context'),
-	Node                = require('./node');
+	Node                = require('./node'),
+	StdLoader           = require('./std'),
+	ModuleProperty      = require('./std/moduleProperty');
 
 //TODO: Interpret break
 
 class Interpreter {
 	constructor() {
 		this.context = new Context();
+
+		this.std = new StdLoader({
+			context: this.context
+		});
 	}
 
 	run(tree) {
@@ -72,6 +78,7 @@ class Interpreter {
 			case '-=': return this.assignDecrease(node.first, node.second);
 			case '(': return this.callFunction(node.first, node.second);
 			case 'mod': return this.mod(node.first, node.second);
+			case '.': return this.dot(node.first, node.second);
 		}
 	}
 
@@ -112,7 +119,12 @@ class Interpreter {
 	}
 	
 	returnStatement(first) {
-		let value = this.simplify(first);
+		let value;
+		if (this.isSimplifiable(first)) {
+			value = this.simplify(first);
+		} else {
+			value = this.getNodeValue(first);
+		}
 		
 		this.context.setVar('(return)', value);
 		
@@ -306,24 +318,56 @@ class Interpreter {
 		return Node.createNumber(f||s);
 	}
 
-	callFunction(first, second) {
-		let func = this.context.getVar(first.value);
+	dot(first, second) {
+		let module = this.getNodeValue(first);
+		let property = this.getNodeValue(second);
+		if (typeof module === 'object') {
+			//Is a valid module
+			let modProperty = new ModuleProperty({
+				module,
+				property: module[property]
+			});
+			return modProperty;
+		} else {
+			this.error('Invalid first value of dot');
+		}
+	}
 
-		if (!func) {
-			console.log(`[ INTERPRET ERROR ] ${first.value} function not found`);
-			return false;
+	callFunction(first, second) {
+		let self = this;
+		if (this.isSimplifiable(first)) {
+			first = this.simplify(first);
+
+			if (first instanceof ModuleProperty) {
+				if (first.isFunction()) {
+					let args = second.map(function (each) {
+						return self.getNodeValue(each);
+					});
+					let result = first.call(args);
+					this.context.setVar('(return)', result);
+					return true;
+				}
+			}
+
+		} else {
+			let func = this.context.getVar(first.value);
+
+			if (!func) {
+				console.log(`[ INTERPRET ERROR ] ${first.value} function not found`);
+				return false;
+			}
+			let params = [];
+			for (let param of second) {
+				params.push(this.getNodeValue(param));
+			}
+
+			let funcInt = new Interpreter();
+			funcInt.setParent(this.context);
+			func.prepareContext(funcInt.context, params);
+			funcInt.run(func.body);
+
+			return funcInt.context.getVar('(return)');
 		}
-		let params = [];
-		for (let param of second) {
-			params.push(this.getNodeValue(param));
-		}
-		
-		let funcInt = new Interpreter();
-		funcInt.setParent(this.context);
-		func.prepareContext(funcInt.context, params);
-		funcInt.run(func.body);
-		
-		return funcInt.context.getVar('(return)');
 	}
 
 	checkAndAssign(first, second, third) {
@@ -345,6 +389,7 @@ class Interpreter {
 				break;
 			case 'binary': result = this.binarySimplifier(node);
 				break;
+			case 'string': result = node.value;
 		}
 
 		if (result instanceof Node) {
@@ -356,6 +401,10 @@ class Interpreter {
 
 	setParent(context) {
 		this.context.parent = context;
+	}
+
+	error(txt) {
+		console.log(`[ RUNTIME ERROR ] ${txt}`);
 	}
 	
 }
