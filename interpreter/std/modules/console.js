@@ -16,6 +16,14 @@ function log(type, txt) {
 	console.log(text);
 }
 
+function warn(txt) {
+	log('WARNING', txt);
+}
+
+function error(txt) {
+	log('ERROR', txt);
+}
+
 module.exports = {
-	log
+	log, warn, error
 };

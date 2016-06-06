@@ -132,14 +132,22 @@ function filterComments(tokens) {
 	return result;
 }
 
+function filterSpaces(tokens) {
+	return tokens.filter(function (each) {
+		return each.type !== 'space';
+	});
+}
+
 function analyse(tokens) {
 
 	//After analysing lets clean up the spaces
-	let filtered = tokens.filter(function (each) {
-		return each.type !== 'space';
-	});
-
-	return filterComments(filterHex(filterStrings(filtered)));
+	return filterComments(
+		filterHex(
+			filterSpaces(
+				filterStrings(tokens)
+			)
+		)
+	);
 }
 
 function lex(code) {
