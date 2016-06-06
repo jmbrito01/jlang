@@ -6,6 +6,7 @@ class Context {
 		if (!opts) opts = {};
 
 		this.vars = new Map();
+		this.flags = new Map();
 
 		this.parent = opts.parent;
 	}
@@ -39,6 +40,16 @@ class Context {
 		this.setVar(func.name, func);
 		return func;
 	}
+	
+	setFlag(f, v) {
+		this.flags.set(f, v);
+	}
+	
+	getFlag(f) {
+		return this.flags.get(f);
+	}
+	
+	
 }
 
 module.exports = Context;

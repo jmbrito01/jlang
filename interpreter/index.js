@@ -47,6 +47,7 @@ class Interpreter {
 			case 'if': return this.ifStatement(node.first, node.second, node.third);
 			case 'while': return this.whileStatement(node.first, node.second);
 			case 'ret': return this.returnStatement(node.first);
+			case 'break': return this.breakStatement();
 		}
 	}
 
@@ -89,6 +90,8 @@ class Interpreter {
 	}
 
 	whileStatement(first, second) {
+		this.context.setFlag('break', false);
+
 		let condition;
 		do {
 			condition = this.simplify(first);
@@ -98,8 +101,13 @@ class Interpreter {
 			}
 			if (condition) this.run(second);
 			
-		} while (condition);
+		} while (condition && !this.context.getFlag('break'));
 
+		return true;
+	}
+
+	breakStatement() {
+		this.context.setFlag('break', true);
 		return true;
 	}
 	

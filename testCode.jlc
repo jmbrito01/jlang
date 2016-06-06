@@ -5,5 +5,8 @@ i = 0;
 if isEven(2) {
     while i < 5 {
         i += 1;
+        if i > 3 {
+            break;
+        }
     }
 }
