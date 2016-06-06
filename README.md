@@ -25,6 +25,7 @@ has access to it's parent)
 
 * Basic Math Operations (sum, subtract, multiply, divide...)
 * Logical Operations (and, or, bigger, smaller, bigger or equal...)
+* Standard modules and functions (such as `console.log`)
 
 
 ### License
