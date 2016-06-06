@@ -8,6 +8,9 @@ class Function {
 	}
 	
 	prepareContext(context, params) {
+		context.setVar('(this)', {
+			__name: '(this)'
+		});
 		for (let i = 0;i < this.params.length;i++) {
 			context.setVar(this.params[i].value, params[i]);
 		}

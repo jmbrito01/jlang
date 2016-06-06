@@ -31,11 +31,8 @@ class Interpreter {
 			case 'ternary': return this.ternarySimplifier(node);
 			case 'statement': return this.statementSimplifier(node);
 			case 'function': return this.functionSimplifier(node);
+			case 'this': return this.context.getVar('(this)');
 		}
-	}
-
-	isSimplifiable(node) {
-		return node.arity === ('binary' || 'ternary' || 'statement' || 'function');
 	}
 
 	ternarySimplifier(node) {
@@ -120,7 +117,7 @@ class Interpreter {
 	
 	returnStatement(first) {
 		let value;
-		if (this.isSimplifiable(first)) {
+		if (Interpreter.isSimplifiable(first)) {
 			value = this.simplify(first);
 		} else {
 			value = this.getNodeValue(first);
@@ -128,10 +125,17 @@ class Interpreter {
 		
 		this.context.setVar('(return)', value);
 		
-		return value;
+		return Node.createNode(value);
 	}
 
 	assign(first, second) {
+		if (Interpreter.isSimplifiable(first)) {
+			first = this.simplify(first);
+
+			if (first instanceof ModuleProperty) {
+				first.value = first;
+			}
+		}
 		switch (second.arity) {
 			case 'number':
 				this.context.setVar(first.value, second.value);
@@ -149,6 +153,9 @@ class Interpreter {
 			case 'binary':
 				let node = this.binarySimplifier(second);
 				let s = this.getNodeValue(node);
+				if (typeof s === 'object' && s.__name) {
+					s.__name = first.value;
+				}
 				this.context.setVar(first.value, s);
 				return true;
 			default: return false;
@@ -325,7 +332,7 @@ class Interpreter {
 			//Is a valid module
 			let modProperty = new ModuleProperty({
 				module,
-				property: module[property]
+				property: property
 			});
 			return modProperty;
 		} else {
@@ -335,7 +342,7 @@ class Interpreter {
 
 	callFunction(first, second) {
 		let self = this;
-		if (this.isSimplifiable(first)) {
+		if (Interpreter.isSimplifiable(first)) {
 			first = this.simplify(first);
 
 			if (first instanceof ModuleProperty) {
@@ -366,14 +373,14 @@ class Interpreter {
 			func.prepareContext(funcInt.context, params);
 			funcInt.run(func.body);
 
-			return funcInt.context.getVar('(return)');
+			return Node.createNode(funcInt.context.getVar('(return)'));
 		}
 	}
 
 	checkAndAssign(first, second, third) {
 		let f = this.getNodeValue(first);
-		if (this.isSimplifiable(second)) second = this.simplify(second);
-		if (this.isSimplifiable(third)) third = this.simplify(third);
+		if (Interpreter.isSimplifiable(second)) second = this.simplify(second);
+		if (Interpreter.isSimplifiable(third)) third = this.simplify(third);
 		if (f) return second;
 		else return third;
 	}
@@ -393,6 +400,10 @@ class Interpreter {
 				break;
 			case 'object': result = node.value;
 				break;
+			case 'this': result = this.simplify(node);
+				break;
+			case 'moduleProperty': result = node.property;
+				break;
 		}
 
 		if (result instanceof Node) {
@@ -406,8 +417,15 @@ class Interpreter {
 		this.context.parent = context;
 	}
 
-	error(txt) {
+	static error(txt) {
 		console.log(`[ RUNTIME ERROR ] ${txt}`);
+	}
+
+	static isSimplifiable(node) {
+		return (
+			node.arity === 'binary' || node.arity === 'ternary' || node.arity === 'statement' ||
+			node.arity === 'function' || node.arity === 'this'
+		);
 	}
 	
 }

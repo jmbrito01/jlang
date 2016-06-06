@@ -18,7 +18,7 @@ the parsed tree.
 has access to it's parent)
     * Variables can be numbers or strings
     * Numbers can be written as decimals or hexadecimals
-* Functions ( Function calling, returning)
+* Functions ( Function calling, returning, this object)
 * Statements
     * If (with Else)
     * While (with Break)

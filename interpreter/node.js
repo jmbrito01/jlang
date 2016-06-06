@@ -30,6 +30,10 @@ class Node {
 	}
 
 	static createObject(val) {
+		if (val === null) {
+			return Node.createLiteral(val);
+		}
+
 		return new Node({
 			arity: 'object',
 			id: val,

@@ -2,8 +2,12 @@ class ModuleProperty {
 	constructor(opts) {
 		if (!opts) opts = {};
 		
+		this.arity = 'moduleProperty';
+		
 		this.module = opts.module;
-		this.property = opts.property;
+		this.name = opts.property;
+		
+		this.property = this.module[this.name];
 	}
 	
 	isFunction() {

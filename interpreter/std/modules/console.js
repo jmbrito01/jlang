@@ -25,5 +25,6 @@ function error(txt) {
 }
 
 module.exports = {
-	log, warn, error
+	log, warn, error,
+	__name: 'console'
 };

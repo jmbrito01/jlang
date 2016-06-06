@@ -7,5 +7,6 @@ function nodeRequire(module) {
 }
 
 module.exports = {
-	require: nodeRequire
+	require: nodeRequire,
+	__name: 'node'
 };

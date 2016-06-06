@@ -40,6 +40,12 @@ class Parser {
 			return this;
 		};
 
+		this.symbol('this').nud = function () {
+			parser.scope.reserve(this);
+			this.arity = 'this';
+			return this;
+		};
+
 		this.infix('?', 20, function led(left) {
 			this.first = left;
 			this.second = parser.expression(0);

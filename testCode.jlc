@@ -1,2 +1,7 @@
-path = node.require("path");
-i = path.isAbsolute("./abc");
+func test param {
+    this.id = 0;
+    ret this;
+}
+
+var testObj = test();
+i = testObj.id;

@@ -1,5 +1,6 @@
 const 
-	Function            = require('./function');
+	Function            = require('./function'),
+	ModuleProperty      = require('./std/moduleProperty');
 
 class Context {
 	constructor(opts) {
@@ -23,11 +24,19 @@ class Context {
 	}
 	
 	setVar(name, val) {
-		let cur = this.parent;
+		let cur = this;
 		while (cur) {
-			let variable = cur.vars.get(name);
-			if (variable !== undefined) {
-				return cur.vars.set(name, val);
+			if (name instanceof ModuleProperty) {
+				let variable = cur.vars.get(name.module.__name);
+				if (variable) {
+					variable[name.name] = val;
+					cur.vars.set(name.module, variable);
+				}
+			} else {
+				let variable = cur.vars.get(name);
+				if (variable !== undefined) {
+					return cur.vars.set(name, val);
+				}
 			}
 
 			cur = cur.parent;
