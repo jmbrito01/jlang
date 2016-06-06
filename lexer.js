@@ -1,8 +1,6 @@
 const 
 	Lexer           = require('lex');
 
-//TODO: Filter comments
-
 function tokenize(code) {
 
 	let lexer = new Lexer();

@@ -4,8 +4,6 @@ const
 	StdLoader           = require('./std'),
 	ModuleProperty      = require('./std/moduleProperty');
 
-//TODO: Interpret break
-
 class Interpreter {
 	constructor() {
 		this.context = new Context();

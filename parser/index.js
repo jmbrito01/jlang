@@ -214,7 +214,6 @@ class Parser {
 					parser.advance();
 
 					if (parser.token.id !== ',') {
-						//TODO: Check this, is this really right?
 						break;
 					}
 					parser.advance(',');
