@@ -5,3 +5,4 @@ func test param {
 
 var testObj = test();
 i = testObj.id;
+

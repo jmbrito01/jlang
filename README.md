@@ -12,6 +12,20 @@ TDOP article](http://javascript.crockford.com/tdop/tdop.html)
 * JLang Interpreter: Simple interpreter made to understand
 the parsed tree.
 
+### Test Code
+
+```
+func test param {
+    this.id = 0;
+    ret this;
+}
+
+var testObj = test();
+i = testObj.id;
+
+
+```
+
 ### What the language already have?
 
 * Variables ( contexts for each function and every context
@@ -26,6 +40,7 @@ has access to it's parent)
 * Basic Math Operations (sum, subtract, multiply, divide...)
 * Logical Operations (and, or, bigger, smaller, bigger or equal...)
 * Standard modules and functions (such as `console.log`)
+* Node modules imports (`node.require`)
 
 
 ### License
