@@ -41,6 +41,7 @@ has access to it's parent)
 * Logical Operations (and, or, bigger, smaller, bigger or equal...)
 * Standard modules and functions (such as `console.log`)
 * Node modules imports (`node.require`)
+* Basic function migration (Javascript functions being executed in the JLang vm)
 
 
 ### License

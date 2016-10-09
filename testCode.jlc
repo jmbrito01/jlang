@@ -1,8 +1,1 @@
-func test param {
-    this.id = 0;
-    ret this;
-}
-
-var testObj = test();
-i = testObj.id;
-
+myname("TEST");

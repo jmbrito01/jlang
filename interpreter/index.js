@@ -3,7 +3,7 @@ const
 	Node                = require('./node'),
 	StdLoader           = require('./std'),
 	ModuleProperty      = require('./std/moduleProperty');
-
+//TODO: Split run/create context things and simplifying logic of this class in two separate classes
 class Interpreter {
 	constructor() {
 		this.context = new Context();
@@ -20,6 +20,7 @@ class Interpreter {
 				if (!result) throw `ERROR INTERPRETING ${node.id}`;
 			}
 		}
+		return result.value;
 
 	}
 
@@ -366,12 +367,19 @@ class Interpreter {
 				params.push(this.getNodeValue(param));
 			}
 
-			let funcInt = new Interpreter();
-			funcInt.setParent(this.context);
-			func.prepareContext(funcInt.context, params);
-			funcInt.run(func.body);
+			if (func.isNative()) {
+				//execute native javascript function
+				return Node.createNode(func.runNative(params));
+			} else {
+				let funcInt = new Interpreter();
+				funcInt.setParent(this.context);
+				func.prepareContext(funcInt.context, params);
+				funcInt.run(func.body);
 
-			return Node.createNode(funcInt.context.getVar('(return)'));
+				return Node.createNode(funcInt.context.getVar('(return)'));
+			}
+
+			
 		}
 	}
 
@@ -413,6 +421,10 @@ class Interpreter {
 
 	setParent(context) {
 		this.context.parent = context;
+	}
+
+	addFunction(name, fn) {
+		return this.context.addFunction(name, fn);
 	}
 
 	static error(txt) {

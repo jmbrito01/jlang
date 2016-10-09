@@ -1,10 +1,30 @@
-class Function {
-	constructor(opts) {
-		this.node = opts;
-		
-		this.name = this.node.value;
-		this.params = this.node.first;
-		this.body = this.node.second;
+const
+	vm		= require('vm');
+
+class JFunction {
+	constructor(fn, name) {
+		if (fn instanceof Function) {
+			// Direct javascript function
+			this.name = name || fn.name;
+			this.native = true;
+			this.fn = fn;
+		} else {
+			// Uninterpreted function
+			this.node = fn;
+			this.native = false;
+			this.name = this.node.value;
+			this.params = this.node.first;
+			this.body = this.node.second;
+		}
+	}
+
+	isNative() {
+		return this.native;
+	}
+
+	runNative(params) {
+		//TODO: Separate the native execution vm with the interpreter vm for obvious security reasons
+		return this.fn.apply(null, params);
 	}
 	
 	prepareContext(context, params) {
@@ -17,4 +37,4 @@ class Function {
 	}
 }
 
-module.exports = Function;
+module.exports = JFunction;

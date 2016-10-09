@@ -1,4 +1,5 @@
 const 
+	vm					= require('vm'),
 	Function            = require('./function'),
 	ModuleProperty      = require('./std/moduleProperty');
 
@@ -22,6 +23,10 @@ class Context {
 		}
 		return null;
 	}
+
+	entries() {
+		return this.vars.entries();
+	}
 	
 	setVar(name, val) {
 		let cur = this;
@@ -44,8 +49,8 @@ class Context {
 		return this.vars.set(name, val);
 	}
 
-	addFunction(node) {
-		let func = new Function(node);
+	addFunction(name, fn) {
+		let func = new Function(fn, name);
 		this.setVar(func.name, func);
 		return func;
 	}
@@ -56,6 +61,14 @@ class Context {
 	
 	getFlag(f) {
 		return this.flags.get(f);
+	}
+
+	exportVMContext() {
+		let result = {};
+		for (let each of this.vars.entries()) {
+			result[each[0]] = each[1];
+		}
+		return vm.createContext(result);
 	}
 	
 	
